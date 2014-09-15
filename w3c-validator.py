@@ -11,8 +11,7 @@ import os
 import sys
 import time
 import json
-import commands
-import urllib
+import subprocess
 
 html_validator_url = 'http://validator.w3.org/check'
 css_validator_url = 'http://jigsaw.w3.org/css-validator/validator'
@@ -20,7 +19,7 @@ css_validator_url = 'http://jigsaw.w3.org/css-validator/validator'
 verbose_option = False
 
 def message(msg):
-    print >> sys.stderr, msg
+    print (msg, file=sys.stderr)
 
 def verbose(msg):
     if verbose_option:
@@ -33,7 +32,7 @@ def validate(filename):
     Return '' if the validator does not return valid JSON.
     Raise OSError if curl command returns an error status.
     '''
-    quoted_filename = urllib.quote(filename)
+    quoted_filename = filename
     if filename.startswith('http://'):
         # Submit URI with GET.
         if filename.endswith('.css'):
@@ -51,7 +50,7 @@ def validate(filename):
             cmd = ('curl -sF "uploaded_file=@%s;type=text/html" -F output=json %s'
                     % (quoted_filename, html_validator_url))
     verbose(cmd)
-    status,output = commands.getstatusoutput(cmd)
+    status,output = subprocess.getstatusoutput(cmd)
     if status != 0:
         raise OSError (status, 'failed: %s' % cmd)
     verbose(output)
