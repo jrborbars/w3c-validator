@@ -19,7 +19,7 @@ css_validator_url = 'http://jigsaw.w3.org/css-validator/validator'
 verbose_option = False
 
 def message(msg):
-    print (msg, file=sys.stderr)
+    print (msg, file=sys.stderr) # changed here
 
 def verbose(msg):
     if verbose_option:
@@ -32,7 +32,7 @@ def validate(filename):
     Return '' if the validator does not return valid JSON.
     Raise OSError if curl command returns an error status.
     '''
-    quoted_filename = filename
+    quoted_filename = filename # changed here
     if filename.startswith('http://'):
         # Submit URI with GET.
         if filename.endswith('.css'):
@@ -50,7 +50,7 @@ def validate(filename):
             cmd = ('curl -sF "uploaded_file=@%s;type=text/html" -F output=json %s'
                     % (quoted_filename, html_validator_url))
     verbose(cmd)
-    status,output = subprocess.getstatusoutput(cmd)
+    status,output = subprocess.getstatusoutput(cmd)    # changed here
     if status != 0:
         raise OSError (status, 'failed: %s' % cmd)
     verbose(output)
